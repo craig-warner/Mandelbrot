@@ -18,7 +18,7 @@
  * 
  */
 #include <pthread.h>
-#include "mandel.h" 
+#include "mandel.h"
 /*
  * Defines
  */

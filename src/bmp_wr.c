@@ -4,10 +4,11 @@
  * Written by Michael Sweet.
  */
 
-#include "bmp.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+
+#include "BMP.h"
 
 /*
  * Functions

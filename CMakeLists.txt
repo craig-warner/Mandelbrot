@@ -19,20 +19,25 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # The compiled library code is here
 add_subdirectory(src)
 
-find_package(Threads)
+#find_package(Threads)
 
 # The executable code is here
 #add_subdirectory(apps)
 
-add_executable(Mandelbrot 
-		${PROJECT_SOURCE_DIR}/src/mandelbrot.c
-		${PROJECT_SOURCE_DIR}/src/mandel.c
-		${PROJECT_SOURCE_DIR}/src/bmp_wr.c
-		${PROJECT_SOURCE_DIR}/src/BMP.c
+#add_executable(Mandelbrot 
+#		${PROJECT_SOURCE_DIR}/src/mandelbrot.c
+#		${PROJECT_SOURCE_DIR}/src/mandel.c
+#		${PROJECT_SOURCE_DIR}/src/bmp_wr.c
+#		${PROJECT_SOURCE_DIR}/src/BMP.c
+#
+#		${PROJECT_SOURCE_DIR}/src/BMP.h
+#		${PROJECT_SOURCE_DIR}/src/mandel.h
+#		${PROJECT_SOURCE_DIR}/src/movie.h
+#)
 
-		${PROJECT_SOURCE_DIR}/src/BMP.h
-		${PROJECT_SOURCE_DIR}/src/mandel.h
-		${PROJECT_SOURCE_DIR}/src/movie.h
+add_executable(Mandelbrot 
+	${PROJECT_SOURCE_DIR}/src/mandel_txt.h
+	${PROJECT_SOURCE_DIR}/src/mandel_txt.c
 )
 
 #target_include_directories(${PROJECT_NAME}  PUBLIC 

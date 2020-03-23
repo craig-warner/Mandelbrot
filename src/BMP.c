@@ -1,6 +1,6 @@
+#include <assert.h>
 #include "mandel.h"
-#include "bmp.h"
-#include "assert.h"
+#include "BMP.h"
  
 int create_bmp();
 void create_infoheader();
