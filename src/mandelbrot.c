@@ -1,6 +1,7 @@
 /* 
  * Create Mandelbrot Movie 
  */
+#include <math.h>
 #include "movie.h"
 #include "mandel.h"
 /*
@@ -16,26 +17,27 @@ int create_frames();
 int adjust_image();
 int adjust_tiles();
 int adjust_range();
+
 /*
- * Functions
+ * Mandelbrot <frame> <log2_tiles_per_side> <pixels_per_image_side>
  */
 
-main()
-{
+
+main(int argc,char *argv[])	{
 struct_image image;
 CMovie_Trajectory trajectory;
 
-	initialize_trajectory (&trajectory);
-	initialize_image(&image);
-	system("mkdir frames");
+	initialize_trajectory (&trajectory,(unsigned int) atoi(argv[1]));
+	initialize_image(&image,(unsigned int) atoi(argv[2]),(unsigned int) atoi(argv[3]));
+	//system("mkdir frames");
 	create_frames("frames",&image,&trajectory);
 }
 
-int initialize_image (struct_image *image) 
+int initialize_image (struct_image *image,unsigned int log2_tiles_per_side, unsigned int pps) 
 {
-	image->pixels_per_image_side = 1000; 
-	image->tiles_per_side = 4;
-	image->log2_tiles_per_side = 2;
+	image->pixels_per_image_side = pps; 
+	image->tiles_per_side = (1<<log2_tiles_per_side);
+	image->log2_tiles_per_side = log2_tiles_per_side;
 	image->min_x = -1;
 	image->min_y = -1.5;
 	image->length = 3; 
@@ -45,7 +47,7 @@ int initialize_image (struct_image *image)
 	create_tiles(image);
 }
 
-int initialize_trajectory (CMovie_Trajectory *t)
+int initialize_trajectory (CMovie_Trajectory *t,unsigned int starting_frame)
 {
 	t->deltax[0]= 0.01;
 	t->deltay[0]= 0.02;
@@ -85,8 +87,8 @@ int initialize_trajectory (CMovie_Trajectory *t)
 	t->index= 0;
 	t->cur_duration = 0;
 
-	t->num_frames = 300;
-	t->starting_frame = 0;
+	t->num_frames = 1;
+	t->starting_frame = starting_frame;
 }
 
 int create_frames(char *pch_directory, struct_image *image, 
@@ -102,8 +104,8 @@ unsigned int iStartFrame;
 	for(iFrame=0;iFrame<iStartFrame;iFrame++) {
 		adjust_image(image,ptTraj);
 	}
-	printf("Info:Skipped Frames\n");		
-	for(iFrame=iStartFrame;iFrame<iNum_frames;iFrame++) {
+	//printf("Info:Skipped Frames\n");		
+	for(iFrame=iStartFrame;iFrame<(iStartFrame+iNum_frames);iFrame++) {
 		if(iFrame != iStartFrame) {
 			adjust_image(image,ptTraj);
 		}
@@ -111,7 +113,7 @@ unsigned int iStartFrame;
 		sprintf(file_name,"%s/m%05d.bmp",
 				pch_directory,iFrame);
 		create_bmp(image,file_name);
-		printf("Frame %d Created\n",iFrame);		
+		//printf("Frame %d Created\n",iFrame);		
 	}
 }
 

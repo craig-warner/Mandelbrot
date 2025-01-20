@@ -6,7 +6,7 @@
 /*
  * Defines
  */
-#define MAX_PIXELS 1024 
+#define MAX_PIXELS 4096 
 #define MAX_TILES 16 
 
 /*

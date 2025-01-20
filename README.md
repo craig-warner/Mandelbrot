@@ -1,10 +1,7 @@
-Mandelbrot
-========
+# Mandelbrot
 - A multi-threaded C program for generating Mandelbort Images and Movies.
 
-Building
-========
-
+# Building
 Here are  the steps for building the executables for
 
  * cd Mandelbrot
@@ -12,10 +9,10 @@ Here are  the steps for building the executables for
  * cd apps
  * make -j
 
-To run the program ./Mandelbrot
-	
-Issues
-======
+# Running (From the apps directory)
+ * ../scripts/run_mandelbrot.py --num_processes 32 --num_threads 1 
+ * ../scripts/run_mandelbrot.py --num_processes 1 --num_threads 256 
 
+# Issues
  * Multi-Threaded Cmake is broken
  * RISC-V tager not added yet
