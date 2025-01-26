@@ -2,6 +2,8 @@
  * Create Mandelbrot Movie 
  */
 #include <math.h>
+#include <stdio.h>
+#include <argp.h>
 #include "movie.h"
 #include "mandel.h"
 /*
@@ -20,15 +22,119 @@ int adjust_range();
 
 /*
  * Mandelbrot <frame> <log2_tiles_per_side> <pixels_per_image_side>
+ * %Mandelbrot <frame> <log2_tiles_per_side> <pixels_per_image_side> [--text]
  */
 
+const char *argp_program_version = "Mandelbrot 1.0";
+const char *argp_program_bug_address= "cgwarner2014@gmail.com";
+struct arguments
+{
+  unsigned int frame; 					// Frame number ARG1
+  unsigned int log2_tiles_per_side; 	// Log2 of tiles per side ARG2
+  unsigned int pixels_per_image_side;	// Pixels per image side ARG3
+  int text; 							// Text output -text
+  int verbose; 							// Verbose output -v
+};
+
+/*
+   OPTIONS.  Field 1 in ARGP.
+   Order of fields: {NAME, KEY, ARG, FLAGS, DOC}.
+*/
+static struct argp_option options[] =
+{
+  {"verbose", 'v', 0, 0, "Produce verbose output"},
+  {"text", 't', 0, 0, "Text output"},
+  {"frame",   'f', 0, 0, "Frame Number"},
+  {"log2_tiles_per_side",   'l', 0, 0, "Log2 of Tiles Per Side"},
+  {"pixels_per_image_side",   'p', 0, 0, "Pixels Per Image Side"},
+  {0}
+};
+
+static error_t parse_opt ( int key, char *arg, struct argp_state *state) {
+  struct arguments *arguments = state->input;
+  switch (key) {
+	case 'v':
+	  arguments->verbose=1; // Verbose output
+	  break;
+	case 't':
+	  arguments->text=1; // Text output
+	  break;
+	case ARGP_KEY_ARG:
+	  if (state->arg_num >= 3) {
+		argp_usage(state);
+	  }
+	  switch (state->arg_num) {
+		case 0:
+		  arguments->frame = atoi(arg);
+		  break;
+		case 1:
+		  arguments->log2_tiles_per_side = atoi(arg);
+		  break;
+		case 2:
+		  arguments->pixels_per_image_side = atoi(arg);
+		  break;
+	  }
+	  break;
+	case ARGP_KEY_END:
+	  if (state->arg_num < 3) {
+		argp_usage(state);
+	  }
+	  break;
+	default:
+	  return ARGP_ERR_UNKNOWN;
+  }
+  return 0;
+}
+
+
+/*
+   ARGS_DOC. Field 3 in ARGP.
+   A description of the non-option command-line arguments
+     that we accept.
+*/
+static char args_doc[] = "<frame number> <log2_tiles_per_side> <pixels_per_image_side> [-t] [-v]";
+
+/*
+  DOC.  Field 4 in ARGP.
+  Program documentation.
+*/
+static char doc[] = "Mandelbrot -- A program to draw Mandelbrot images.";
+/*
+   The ARGP structure itself.
+*/
+static struct argp argp = {options, parse_opt, args_doc, doc};
+
+/*
+   The main function.
+   Notice how now the only function call needed to process
+   all command-line options and arguments nicely
+   is argp_parse.
+*/
 
 main(int argc,char *argv[])	{
 struct_image image;
 CMovie_Trajectory trajectory;
+struct arguments arguments;
 
-	initialize_trajectory (&trajectory,(unsigned int) atoi(argv[1]));
-	initialize_image(&image,(unsigned int) atoi(argv[2]),(unsigned int) atoi(argv[3]));
+/* Argp Default values*/
+	arguments.frame = 0;
+	arguments.log2_tiles_per_side = 2;
+	arguments.pixels_per_image_side = 128;
+	arguments.text = 0;
+	arguments.verbose= 0;
+
+ 	/* Where the argument parsing magic happens */
+  	argp_parse (&argp, argc, argv, 0, 0, &arguments);
+
+	if (arguments.verbose) {
+		printf ("Frame Number = %d\n", arguments.frame);
+		printf ("Log2 of Tiles Per Side = %d\n", arguments.log2_tiles_per_side);
+		printf ("Pixels Per Image Side = %d\n", arguments.pixels_per_image_side);
+		printf ("Text output = %s\n", arguments.text ? "yes" : "no");
+	}
+
+	initialize_trajectory (&trajectory,arguments.frame);
+	initialize_image(&image,arguments.log2_tiles_per_side,arguments.pixels_per_image_side);
 	//system("mkdir frames");
 	create_frames("frames",&image,&trajectory);
 }
