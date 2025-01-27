@@ -14,5 +14,5 @@ Here are  the steps for building the executables for
  * ../scripts/run_mandelbrot.py --num_processes 1 --num_threads 256 
 
 # Issues
- * Multi-Threaded Cmake is broken
- * RISC-V tager not added yet
+  * Tragectory broken 
+  * Text image does not use trojectory 

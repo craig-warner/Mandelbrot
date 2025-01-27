@@ -29,10 +29,12 @@ add_executable(Mandelbrot
 		${PROJECT_SOURCE_DIR}/src/mandel.c
 		${PROJECT_SOURCE_DIR}/src/bmp_wr.c
 		${PROJECT_SOURCE_DIR}/src/BMP.c
+		${PROJECT_SOURCE_DIR}/src/mandel_txt.c
 
 		${PROJECT_SOURCE_DIR}/src/BMP.h
 		${PROJECT_SOURCE_DIR}/src/mandel.h
 		${PROJECT_SOURCE_DIR}/src/movie.h
+		${PROJECT_SOURCE_DIR}/src/mandel_txt.h
 )
 
 #add_executable(Mandelbrot 

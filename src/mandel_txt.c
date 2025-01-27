@@ -22,14 +22,14 @@
 /*
  * Functions
  */
-void color_image();
-void print_image();
-void print_image_line();
-unsigned get_color ();
-void initialize_image ();
+void txt_color_image();
+void txt_print_image();
+void txt_print_image_line();
+unsigned txt_get_color ();
+void txt_initialize_image ();
 
 
-void color_image(struct_txt_image* image) {
+void txt_color_image(struct_txt_image* image) {
 double c, di;
 double increment;
 unsigned ix,iy;
@@ -52,22 +52,22 @@ unsigned ix,iy;
       }
 
       image->image[ix][iy] =
-        get_color (c,di,image->num_iterations);
+        txt_get_color (c,di,image->num_iterations);
     }
   }
 }
 
-void print_image (struct_txt_image* image)
+void txt_print_image (struct_txt_image* image)
 {
 unsigned itx,ity;
 unsigned iy;
 
   for (iy=0; iy<image->pixels_per_side; iy++) {
-    print_image_line(image,iy);
+    txt_print_image_line(image,iy);
   }
 }
 
-void print_image_line (struct_txt_image* image,unsigned iy)
+void txt_print_image_line (struct_txt_image* image,unsigned iy)
 {
 char text_color[8] = {'.','-','=','!','^','(','@','%'};
 unsigned ix;
@@ -81,7 +81,7 @@ unsigned dot;
   printf("\n");
 }
 
-unsigned get_color (double c, double di,unsigned num_iterations) {
+unsigned txt_get_color (double c, double di,unsigned num_iterations) {
 
 unsigned i;
 double a, bi;
@@ -109,7 +109,7 @@ double threshold;
   }
 }
 
-void initialize_image (struct_txt_image *image)
+void txt_initialize_image (struct_txt_image *image)
 {
   image->pixels_per_side = MAX_PIXELS;
   image->min_x = -1;
@@ -119,6 +119,7 @@ void initialize_image (struct_txt_image *image)
   image->num_iterations = (1<<(image->bits_per_color*3));
 }
 
+/*
 main() {
 
   struct_txt_image img;
@@ -126,3 +127,4 @@ main() {
   color_image (&img);
   print_image (&img);
 }
+*/

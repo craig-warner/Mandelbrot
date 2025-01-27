@@ -6,6 +6,7 @@
 #include <argp.h>
 #include "movie.h"
 #include "mandel.h"
+#include "mandel_txt.h"
 /*
  * Functions
  */
@@ -22,7 +23,7 @@ int adjust_range();
 
 /*
  * Mandelbrot <frame> <log2_tiles_per_side> <pixels_per_image_side>
- * %Mandelbrot <frame> <log2_tiles_per_side> <pixels_per_image_side> [--text]
+ * %Mandelbrot [options] <frame> <log2_tiles_per_side> <pixels_per_image_side>
  */
 
 const char *argp_program_version = "Mandelbrot 1.0";
@@ -44,9 +45,9 @@ static struct argp_option options[] =
 {
   {"verbose", 'v', 0, 0, "Produce verbose output"},
   {"text", 't', 0, 0, "Text output"},
-  {"frame",   'f', 0, 0, "Frame Number"},
-  {"log2_tiles_per_side",   'l', 0, 0, "Log2 of Tiles Per Side"},
-  {"pixels_per_image_side",   'p', 0, 0, "Pixels Per Image Side"},
+// {"frame",   'f', 0, 0, "Frame Number"},
+// {"log2_tiles_per_side",   'l', 0, 0, "Log2 of Tiles Per Side"},
+// {"pixels_per_image_side",   'p', 0, 0, "Pixels Per Image Side"},
   {0}
 };
 
@@ -92,7 +93,7 @@ static error_t parse_opt ( int key, char *arg, struct argp_state *state) {
    A description of the non-option command-line arguments
      that we accept.
 */
-static char args_doc[] = "<frame number> <log2_tiles_per_side> <pixels_per_image_side> [-t] [-v]";
+static char args_doc[] = "<frame number> <log2_tiles_per_side> <pixels_per_image_side>";
 
 /*
   DOC.  Field 4 in ARGP.
@@ -132,11 +133,24 @@ struct arguments arguments;
 		printf ("Pixels Per Image Side = %d\n", arguments.pixels_per_image_side);
 		printf ("Text output = %s\n", arguments.text ? "yes" : "no");
 	}
+	if(arguments.text) {
+		text_draw_image();
+	}
+	else {
+		initialize_trajectory (&trajectory,arguments.frame);
+		initialize_image(&image,arguments.log2_tiles_per_side,arguments.pixels_per_image_side);
+		//system("mkdir frames");
+		create_frames("frames",&image,&trajectory);
+	}
+}
 
-	initialize_trajectory (&trajectory,arguments.frame);
-	initialize_image(&image,arguments.log2_tiles_per_side,arguments.pixels_per_image_side);
-	//system("mkdir frames");
-	create_frames("frames",&image,&trajectory);
+int text_draw_image () {
+
+  struct_txt_image img;
+
+  txt_initialize_image (&img);
+  txt_color_image (&img);
+  txt_print_image (&img);
 }
 
 int initialize_image (struct_image *image,unsigned int log2_tiles_per_side, unsigned int pps) 
